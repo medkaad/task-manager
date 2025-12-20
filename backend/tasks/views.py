@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from .models import Project, Task
 from .serializers import ProjectSerializer, TaskSerializer
-from rest_framework.permission import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()

@@ -1,5 +1,10 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from "vue"
+import App from "./App.vue"
+import { setAuthToken } from "./services/api"
 
-createApp(App).mount('#app')
+const token = localStorage.getItem("access_token")
+if (token) {
+  setAuthToken(token)
+}
+
+createApp(App).mount("#app")
