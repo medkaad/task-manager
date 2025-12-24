@@ -11,6 +11,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Project.objects.all()
     
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+    
+    
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]

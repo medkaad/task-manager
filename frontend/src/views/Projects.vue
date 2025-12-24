@@ -1,4 +1,22 @@
 <template>
+  <div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Create Project</h5>
+
+    <form @submit.prevent="createProject">
+      <div class="input-group">
+        <input
+          v-model="newProjectName"
+          class="form-control"
+          placeholder="Project name"
+          required
+        />
+        <button class="btn btn-success">Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
   <div>
     <h1 class="h3 mb-3">Projects</h1>
 
@@ -64,7 +82,8 @@ export default {
   data() {
     return {
       projects: [],
-      editingProject: null
+      editingProject: null,
+      newProjectName: "",
     };
   },
   methods: {
@@ -74,6 +93,17 @@ export default {
     startEdit(project) {
       this.editingProject = { ...project };
     },
+    createProject() {
+  api.post("projects/", { name: this.newProjectName })
+    .then(() => {
+      this.$root.showToast("Project created successfully");
+      this.newProjectName = "";
+      this.fetchProjects();
+    })
+    .catch(() => {
+      this.$root.showToast("Error creating project", "danger");
+    });
+},
     updateProject() {
       api
         .put(`projects/${this.editingProject.id}/`, this.editingProject)
