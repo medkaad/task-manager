@@ -1,58 +1,33 @@
 <template>
-  <div>
+  <div class="container mt-5">
     <h2>Login</h2>
-
     <form @submit.prevent="login">
-      <input
-        v-model="username"
-        placeholder="Username"
-        required
-      />
-
-      <input
-        type="password"
-        v-model="password"
-        placeholder="Password"
-        required
-      />
-
-      <button type="submit">Login</button>
+      <input v-model="username" placeholder="Username" class="form-control mb-2" />
+      <input v-model="password" type="password" placeholder="Password" class="form-control mb-2" />
+      <button class="btn btn-primary">Login</button>
+      <p class="text-danger mt-2">{{ error }}</p>
     </form>
-
-    <p v-if="error" style="color:red">{{ error }}</p>
   </div>
 </template>
 
 <script>
-import api, { setAuthToken } from "../services/api"
+import api from "../services/api";
 
 export default {
-  name: "Login",
   data() {
-    return {
-      username: "",
-      password: "",
-      error: null,
-    }
+    return { username: "", password: "", error: null };
   },
   methods: {
-    login() {
-      this.error = null
-
-      api.post("token/", {
-        username: this.username,
-        password: this.password,
-      })
-      .then(res => {
-        const token = res.data.access
-        localStorage.setItem("access_token", token)
-        setAuthToken(token)
-        this.$emit("login-success")
-      })
-      .catch(() => {
-        this.error = "Invalid username or password"
-      })
-    }
-  }
-}
+    async login() {
+      try {
+        const res = await api.post("token/", { username: this.username, password: this.password });
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+        this.$router.push("/");
+      } catch {
+        this.error = "Invalid credentials";
+      }
+    },
+  },
+};
 </script>

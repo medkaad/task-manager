@@ -1,10 +1,8 @@
-import { createApp } from "vue"
-import App from "./App.vue"
-import { setAuthToken } from "./services/api"
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-const token = localStorage.getItem("access_token")
-if (token) {
-  setAuthToken(token)
-}
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 
-createApp(App).mount("#app")
+createApp(App).use(router).mount("#app");

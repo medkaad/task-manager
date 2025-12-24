@@ -1,15 +1,27 @@
-import axios from "axios"
+import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8000/api/",
-})
+});
 
-export const setAuthToken = (token) => {
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("access_token");
   if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`
-  } else {
-    delete api.defaults.headers.common["Authorization"]
+    config.headers.Authorization = `Bearer ${token}`;
   }
-}
+  return config;
+});
 
-export default api
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
