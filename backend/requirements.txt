@@ -5,3 +5,4 @@ django-cors-headers
 djangorestframework-simplejwt
 transformers==4.36.2
 torch
+gunicorn
