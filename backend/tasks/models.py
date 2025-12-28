@@ -8,12 +8,31 @@ class Project(models.Model):
 
 class Task(models.Model):
     STATUS_CHOICES = [
-        ('todo', 'À faire'),
-        ('doing', 'En cours'),
-        ('done', 'Terminé'),
+        ('todo', 'To do'),
+        ('doing', 'Doing'),
+        ('done', 'Done'),
     ]
+
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='todo')
-    project = models.ForeignKey(Project, related_name='tasks', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default='medium'
+    )
+
+    project = models.ForeignKey(
+        'Project',
+        related_name='tasks',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.title

@@ -3,6 +3,15 @@
     <li v-for="task in tasks" :key="task.id" class="list-group-item d-flex justify-content-between">
       <div>
         <strong>{{ task.title }}</strong> - {{ task.status }}
+        <span
+          class="badge ms-2"
+          :class="{
+           'bg-danger': task.priority === 'high',
+            'bg-warning': task.priority === 'medium',
+           'bg-success': task.priority === 'low'
+          }">
+          {{ task.priority }}
+        </span>
       </div>
       <div>
         <button class="btn btn-sm btn-warning me-1" @click="editTask(task)">Edit</button>
