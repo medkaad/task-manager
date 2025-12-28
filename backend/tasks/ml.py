@@ -1,11 +1,16 @@
-from transformers import pipeline
+def predict_priority(text):
+    text = text.lower()
 
-clf = pipeline("text-classification", model="distilbert-base-uncased-finetuned-sst-2-english")
+    high_keywords = ['urgent', 'asap', 'bug', 'error', 'fail', 'crash']
+    medium_keywords = ['soon', 'important', 'update', 'refactor']
 
-def predict_priority(description: str) -> str:
-    result = clf(description)[0]
-    label = result["label"].lower()
+    for word in high_keywords:
+        if word in text:
+            return 'high'
 
-    if "neg" in label:
-        return "high"
-    return "medium"
+    for word in medium_keywords:
+        if word in text:
+            return 'medium'
+
+    return 'low'
+
